@@ -2,7 +2,7 @@
 
 --- A Flutter drawing project by Anuwat. ---
 
-**drawing_flutter** เป็นโปรเจกต์ Flutter ที่เน้นการวาดภาพโดยใช้ความสามารถของ Flutter เพื่อสร้างประสบการณ์การวาดภาพที่ยอดเยี่ยมและอินเทอร์เฟซที่ใช้งานง่าย
+**drawing_flutter** เป็นโปรเจกต์ Flutter ที่เน้นการวาดภาพโดยใช้ความสามารถของ flutter_drawing_board เพื่อสร้างประสบการณ์การวาดภาพที่ยอดเยี่ยมและอินเทอร์เฟซที่ใช้งานง่าย
 
 ในโปรเจกต์นี้ คุณจะได้พบกับฟีเจอร์หลายอย่างที่ช่วยให้การวาดภาพสะดวกและสนุกสนาน รวมถึงการปรับขนาดของพู่กัน, การเปลี่ยนสี,  และฟังก์ชันการ undo redo save การแก้ไขโปรเจคเดิม
 
@@ -11,7 +11,7 @@
 ```bash
 flutter pub get
 ```
-หรือ
+หรือ:
 ```npm
 flutter pub add flutter_colorpicker
 flutter pub add flutter_drawing_board
