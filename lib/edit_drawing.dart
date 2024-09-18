@@ -37,8 +37,8 @@ class _DrawingAppPageState extends State<DrawingAppPage> {
   void initState() {
     //ฟั่งที่จะทำงานเมื่อเริ่มโปรแกรมหรือเริ่มหน้า
     super.initState();
-    _resetState();
     GetJsonDrawing(editFileName); //ส่งชื่อไฟล์สำหรับการแก้ไขรูป
+    _resetState();
   }
 
   void _resetState() {
