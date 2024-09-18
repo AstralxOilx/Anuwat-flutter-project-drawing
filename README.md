@@ -1,3 +1,3 @@
 # drawnig_flutter
 
-#2A new Flutter project.
+---A Flutter drawing project by anuwat. ---
