@@ -10,3 +10,4 @@
 
 ```bash
 flutter pub get
+```
