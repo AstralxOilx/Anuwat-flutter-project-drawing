@@ -1,7 +1,10 @@
-# drawnig_flutter
+# drawing_flutter
 
---- A Flutter drawing project by anuwat. ---
+--- A Flutter drawing project by Anuwat. ---
 
-ใช้ flutter pub get เพื่อลง แพ็กเกจทั้งหมด ใน project
+ใช้คำสั่งต่อไปนี้เพื่อลงแพ็กเกจทั้งหมดในโปรเจกต์:
+
+```bash
+flutter pub get
 
 
