@@ -1,78 +1,82 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:ui' as ui;
 import 'package:drawnig_flutter/globalvariable.dart';
 import 'package:drawnig_flutter/main.dart';
-import 'package:flutter/rendering.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-Future<void> saveDrawing( //ฟังชั่นในการ save รูป
-    {required BuildContext context, //กำหนดให้รับ param  context  globalKey newDrawing
-    required GlobalKey globalKey,
-    required bool newDrawing}) async { //กำหนดเป็น async
+Future<void> saveDrawing({
+  required BuildContext context,
+  required bool newDrawing,
+}) async {
   try {
-    //กำหนดตัวแปรในการ บันทึกรูป
-    final boundary =
-        globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
-    final image = await boundary.toImage(); //รับรูปจาก boundary ที่กำหนดใน การวาด
-    final byteData = await image.toByteData(format: ui.ImageByteFormat.png);//บันทึกรูปเป็น  Byte 
-    final buffer = byteData!.buffer.asUint8List();
+    // รับข้อมูลภาพจาก DrawingController
+    final byteData = await drawingController.getImageData();
 
-    final directory = await getTemporaryDirectory(); //ดึงที่อยูรูปภาพ  directory
-    final now = DateTime.now(); //กำหนดเวลาเพื่อมาตั้งชื่อรูป
-    final timestamp =
-        '${now.year}-${now.month}-${now.day}_${now.hour}-${now.minute}-${now.second}';
-    final path = '${directory.path}/drawing_image_$timestamp.png'; //กำหนดตำแหน่ง บันทึกรูปภาพ
-    final file = File(path); //กำหนดไฟล์ที่อยุ่
-    await file.writeAsBytes(buffer); //เขียนไฟล์
+    // ตรวจสอบว่า byteData เป็น null หรือไม่
+    if (byteData != null) {
+      final buffer =
+          byteData.buffer.asUint8List(); // แปลง ByteData เป็น Uint8List
 
-    final result = await PhotoManager.editor.saveImage( //บันทึกรูป จาก 'package:photo_manager/photo_manager.dart'
-      file.readAsBytesSync(), //อ่านไฟล์
-      filename: '/drawing_image_$timestamp.png',//ชื่อไฟล์
-    );
+      // ดึงที่อยู่ของ directory ที่ใช้ในการบันทึกรูป
+      final directory = await getTemporaryDirectory();
+      final now = DateTime.now(); // รับวันที่และเวลา
+      final timestamp =
+          '${now.year}-${now.month}-${now.day}_${now.hour}-${now.minute}-${now.second}';
+      final path =
+          '${directory.path}/drawing_image_$timestamp.png'; // กำหนดเส้นทางไฟล์
+      final file = File(path); // สร้างไฟล์ที่เส้นทางกำหนด
+      await file.writeAsBytes(buffer); // เขียนข้อมูลลงในไฟล์
 
-    if (result != null) { //เช็คว่า มีรูปไหม
-      ScaffoldMessenger.of(context).showSnackBar(//แสดงข้อความเมื่อบันทึกสำเร็จ
-        SnackBar(content: Text('Save image')),
+      // ใช้ PhotoManager ในการบันทึกรูปลงในอัลบั้มภาพ
+      final result = await PhotoManager.editor.saveImage(
+        buffer, // ใช้ buffer ที่ได้จาก getImageData
+        filename: '/drawing_image_$timestamp.png', // ตั้งชื่อไฟล์
       );
 
-      // print(savedControllers[0].toString());
-
-
-      if (newDrawing == true) { //เช็คว่าเป็นรูปใหม่หรือรูปที่แก้ไข 
-        // สร้างวันที่และเวลาปัจจุบัน
-        final now = DateTime.now();
-        final formatter = DateFormat('yyyyMMdd_HHmmss');
-        final dateTimeString = formatter.format(now);
-        _SaveJsonListNew(dateTimeString); //ถ้าเป็นรูปใหม่บันทึกไฟล์ json พร้อมตั้งชื่อใหม่
-      } else {
-        _SaveJsonListNew(editFileName); //ถ้าไม่ ชื่อชื่อเดิม
-      }
-
-      Future.delayed(Duration(seconds: 2), () { //delay 2 วิเพื่อแสดงข้อความ จาก ScaffoldMessenger
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) => Main()), // เปลี่ยนเป็นหน้าที่ต้องการ
+      if (result != null) {
+        // เช็คว่าการบันทึกสำเร็จหรือไม่
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Save image')),
         );
-      });
+
+        // ตรวจสอบว่าเป็นรูปใหม่หรือไม่
+        if (newDrawing) {
+          // สร้างวันที่และเวลาปัจจุบัน
+          final formatter = DateFormat('yyyyMMdd_HHmmss');
+          final dateTimeString = formatter.format(DateTime.now());
+          _SaveJsonListNew(dateTimeString); // บันทึก JSON พร้อมชื่อใหม่
+        } else {
+          _SaveJsonListNew(editFileName); // บันทึก JSON ด้วยชื่อเดิม
+        }
+
+        Future.delayed(Duration(seconds: 2), () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => Main()), // เปลี่ยนหน้าหลังจากบันทึก
+          );
+        });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to save image')),
+        );
+      }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar( //บันทึกรูปไม่สำเร็จ
-        SnackBar(content: Text('Failed to save image')),
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to retrieve image data')),
       );
     }
-  } catch (e) { //catch ข้อผิดพาด
+  } catch (e) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Failed to save image: $e')),
     );
   }
 }
 
-
-//ฟังชั่นในการ save json 
+//ฟังชั่นในการ save json
 Future<void> _SaveJsonListNew(String name) async {
   try {
     // รับข้อมูล JSON จาก DrawingController

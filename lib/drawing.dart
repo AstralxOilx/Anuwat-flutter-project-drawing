@@ -53,7 +53,7 @@ class _DrawingAppPageState extends State<DrawingAppPage> {
     // เพิ่ม drawingController ลงในลิสต์
     savedControllers.add(drawingController);
     // บันทึกภาพตามที่คุณต้องการ
-    saveDrawing(context: context, globalKey: globalKey, newDrawing: true); //ส่งข้อมูลต่างๆไปยังการ save
+    saveDrawing(context: context, newDrawing: true); //ส่งข้อมูลต่างๆไปยังการ save
   }
 
   @override
