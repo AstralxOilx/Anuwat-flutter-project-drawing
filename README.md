@@ -11,3 +11,16 @@
 ```bash
 flutter pub get
 ```
+หรือ
+```npm
+flutter pub add flutter_colorpicker
+flutter pub add flutter_drawing_board
+flutter pub add material_design_icons_flutter
+flutter pub add path_provider
+flutter pub add photo_manager
+flutter pub add zoom_tap_animation
+dart pub add json_annotation
+dart pub add intl
+dart pub add dev:build_runner
+dart pub add dev:json_serializable
+```
