@@ -161,41 +161,60 @@ class _ToolDrawingState extends State<ToolDrawing> {
   }
 
   void _openColorPicker() {
-    //ฟังชั่นในการเลือกสี
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          //เป็น popup เด้นขึ้นมา
-          title: Text('Select a color'),
-          content: SingleChildScrollView(
-            //ทำให้เลือนได้
-            child: BlockPicker(
-              //ถาดสีจาก package flutter_colorpicker
-              pickerColor: selectedColor, // สีที่แสดงตอนเริ่ม
-              onColorChanged: (Color color) {
-                setState(() {
-                  //กำหนด setState
-                  selectedColor = color; //กำหนดสีให้เป็นสีที่เลือก
-                  drawingController.setStyle(
-                    color: selectedColor, //กำหนดสี
-                    strokeWidth: strokeWidth,
-                    isAntiAlias: true,
-                    style: PaintingStyle.stroke,
-                  );
-                });
-              },
+        var screenSize = MediaQuery.of(context).size;
+
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12.0),
+          ),
+          child: Container(
+            width: screenSize.width * 0.8, // กำหนดความกว้าง
+            height: screenSize.height * 0.7, // กำหนดความสูง
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text('Select a custom color',
+                      style: TextStyle(fontSize: 18)),
+                ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical, // เลื่อนในแนวตั้ง
+
+                    child: ColorPicker(
+                      colorPickerWidth: 200,
+                      pickerColor: selectedColor,
+                      onColorChanged: (Color color) {
+                        setState(() {
+                          selectedColor = color;
+                          drawingController.setStyle(
+                            color: selectedColor,
+                            strokeWidth: strokeWidth,
+                            isAntiAlias: true,
+                            style: PaintingStyle.stroke,
+                          );
+                        });
+                      },
+                      pickerAreaHeightPercent: 1,
+                      enableAlpha: true,
+                      displayThumbColor: true,
+                      showLabel: true,
+                      paletteType: PaletteType.hsv,
+                    ),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('OK'),
+                ),
+              ],
             ),
           ),
-          actions: <Widget>[
-            // actions กำหนด ข้อความ Done เป็น TextButton เมือกด ปิดหน้า selectedColor หรือ ย้อนกลับมาหน้าวาดรูป
-            TextButton(
-              child: Text('Done'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
         );
       },
     );

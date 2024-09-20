@@ -18,3 +18,21 @@ class ColorPalette { //กำหนดตัวแปรสำหรับสี
   static const Color primary = Color.fromARGB(255, 219, 219, 219);
   static const Color toolBg = Color.fromARGB(255, 32, 32, 32);
 }
+
+final List<Map<String, Color>> colorOptions = [
+  {'Black': ColorPalette.black},
+  {'White': ColorPalette.white},
+  {'Red': ColorPalette.red},
+  {'Green': ColorPalette.green},
+  {'Blue': ColorPalette.blue},
+  {'Yellow': ColorPalette.yellow},
+  {'Pink': ColorPalette.pink},
+  {'Purple': ColorPalette.purple},
+  {'Cyan Accent': ColorPalette.cyanAccent},
+  {'Brown': ColorPalette.brown},
+  {'Orange': ColorPalette.orange},
+  {'Grey': ColorPalette.grey},
+  {'Dark Grey': ColorPalette.darkGrey},
+  {'Primary': ColorPalette.primary},
+  {'Tool BG': ColorPalette.toolBg},
+];
