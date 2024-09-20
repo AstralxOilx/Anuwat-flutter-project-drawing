@@ -45,7 +45,7 @@ class _ToolDrawingState extends State<ToolDrawing> {
                               strokeWidth, //กำหนดขนาดเส้นให้เป็นการเลือกจาก strokeWidth
                           isAntiAlias: true, //โหมดป้องกันรอยหยัก
                           style: PaintingStyle
-                              .fill, //มีแบบ PaintingStyle.fill ลงสีทึบ
+                              .stroke, //มีแบบ PaintingStyle.fill ลงสีทึบ
                         );
                       });
                     },
@@ -112,7 +112,7 @@ class _ToolDrawingState extends State<ToolDrawing> {
                           _openColorPicker, //เรียกใช้ฟังชั่น _openColorPicker
                       child: Icon(MdiIcons.palette, //กำสไตล์ให้ icon
                           size: 30,
-                          color: selectedColor), 
+                          color: selectedColor),
                     ),
                   ),
                 ),
@@ -129,7 +129,8 @@ class _ToolDrawingState extends State<ToolDrawing> {
                       color: ColorPalette.darkGrey,
                       onPressed: () {
                         setState(() {
-                          drawingController.undo(); //กำหนดเครื่องมือให้เป็น undo
+                          drawingController
+                              .undo(); //กำหนดเครื่องมือให้เป็น undo
                         });
                       },
                     ),
@@ -144,7 +145,8 @@ class _ToolDrawingState extends State<ToolDrawing> {
                       color: ColorPalette.darkGrey,
                       onPressed: () {
                         setState(() {
-                          drawingController.redo();//กำหนดเครื่องมือให้เป็น redo
+                          drawingController
+                              .redo(); //กำหนดเครื่องมือให้เป็น redo
                         });
                       },
                     ),
@@ -158,17 +160,22 @@ class _ToolDrawingState extends State<ToolDrawing> {
     );
   }
 
-  void _openColorPicker() {//ฟังชั่นในการเลือกสี
+  void _openColorPicker() {
+    //ฟังชั่นในการเลือกสี
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog( //เป็น popup เด้นขึ้นมา
+        return AlertDialog(
+          //เป็น popup เด้นขึ้นมา
           title: Text('Select a color'),
-          content: SingleChildScrollView( //ทำให้เลือนได้
-            child: BlockPicker(//ถาดสีจาก package flutter_colorpicker
+          content: SingleChildScrollView(
+            //ทำให้เลือนได้
+            child: BlockPicker(
+              //ถาดสีจาก package flutter_colorpicker
               pickerColor: selectedColor, // สีที่แสดงตอนเริ่ม
               onColorChanged: (Color color) {
-                setState(() { //กำหนด setState
+                setState(() {
+                  //กำหนด setState
                   selectedColor = color; //กำหนดสีให้เป็นสีที่เลือก
                   drawingController.setStyle(
                     color: selectedColor, //กำหนดสี
@@ -180,7 +187,8 @@ class _ToolDrawingState extends State<ToolDrawing> {
               },
             ),
           ),
-          actions: <Widget>[ // actions กำหนด ข้อความ Done เป็น TextButton เมือกด ปิดหน้า selectedColor หรือ ย้อนกลับมาหน้าวาดรูป
+          actions: <Widget>[
+            // actions กำหนด ข้อความ Done เป็น TextButton เมือกด ปิดหน้า selectedColor หรือ ย้อนกลับมาหน้าวาดรูป
             TextButton(
               child: Text('Done'),
               onPressed: () {
